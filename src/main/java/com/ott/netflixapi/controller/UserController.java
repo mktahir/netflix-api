@@ -16,7 +16,7 @@ public class UserController {
     @PostMapping("/users")
     public User createUser(@RequestBody User response){
         User last = userRepository.findTopByOrderByIdDesc();
-        long lastNum = last.getId();
+        long lastNum = last!=null?last.getId():0;
         response.setId(lastNum+1);
         return userRepository.save(response);
     }
