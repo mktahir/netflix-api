@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -14,16 +15,29 @@ public class UserController {
     UserRepository userRepository;
 
     @PostMapping("/users")
-    public User createUser(@RequestBody User response){
+    public User createUser(@RequestBody User request){
         User last = userRepository.findTopByOrderByIdDesc();
         long lastNum = last!=null?last.getId():0;
-        response.setId(lastNum+1);
-        return userRepository.save(response);
+        request.setId(lastNum+1);
+        return userRepository.save(request);
     }
 
     @GetMapping("/users")
     public List getUsers(){
         List list = userRepository.findAll();
         return list;
+    }
+
+    @GetMapping("/users/{id}")
+    public User getUser(@PathVariable Long id){
+        User user = userRepository. findById(id).orElseThrow();
+        return user;
+    }
+
+    @PutMapping("/users/{id}")
+    public User updateUser(@RequestBody User request,@PathVariable Long id){
+       User user =  userRepository.findById(id).orElseThrow();
+       user.setUsername(request.getUsername());
+       return userRepository.save(user);
     }
 }
