@@ -3,6 +3,7 @@ package com.ott.netflixapi.controller;
 import com.ott.netflixapi.entity.User;
 import com.ott.netflixapi.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Id;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,6 +39,10 @@ public class UserController {
     public User updateUser(@RequestBody User request,@PathVariable Long id){
        User user =  userRepository.findById(id).orElseThrow();
        user.setUsername(request.getUsername());
+       user.setFullname(request.getFullname());
+       user.setEmail(request.getEmail());
+       user.setPhone(request.getPhone());
+       user.setAddress(request.getAddress());
        return userRepository.save(user);
     }
 }
