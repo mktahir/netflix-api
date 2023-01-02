@@ -3,7 +3,6 @@ package com.ott.netflixapi.controller;
 import com.ott.netflixapi.entity.User;
 import com.ott.netflixapi.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Id;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,34 +14,40 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    // to create user
     @PostMapping("/users")
-    public User createUser(@RequestBody User request){
+    public User createUser(@RequestBody User request) {
+        // will get last id nd then add +1
         User last = userRepository.findTopByOrderByIdDesc();
-        long lastNum = last!=null?last.getId():0;
-        request.setId(lastNum+1);
+        // null check if no user found, as this will give null pointer exception, hence check and assigning zero to lastNum if null exception else get id and assign
+        long lastNum = last != null ? last.getId() : 0;
+        //plus 1 added and set to currect request object
+        request.setId(lastNum + 1);
         return userRepository.save(request);
     }
 
     @GetMapping("/users")
-    public List getUsers(){
+    public List getUsers() {
         List list = userRepository.findAll();
         return list;
     }
 
     @GetMapping("/users/{id}")
-    public User getUser(@PathVariable Long id){
-        User user = userRepository. findById(id).orElseThrow();
+    public User getUser(@PathVariable Long id) {
+        User user = userRepository.findById(id).orElseThrow();
         return user;
     }
 
     @PutMapping("/users/{id}")
-    public User updateUser(@RequestBody User request,@PathVariable Long id){
-       User user =  userRepository.findById(id).orElseThrow();
-       user.setUsername(request.getUsername());
-       user.setFullname(request.getFullname());
-       user.setEmail(request.getEmail());
-       user.setPhone(request.getPhone());
-       user.setAddress(request.getAddress());
-       return userRepository.save(user);
+    public User updateUser(@RequestBody User request, @PathVariable Long id) {
+        User user = userRepository.findById(id).orElseThrow();
+        user.setUsername(request.getUsername());
+        user.setFullname(request.getFullname());
+        user.setEmail(request.getEmail());
+        user.setPhone(request.getPhone());
+        user.setAddress(request.getAddress());
+        return userRepository.save(user);
     }
+
+
 }
