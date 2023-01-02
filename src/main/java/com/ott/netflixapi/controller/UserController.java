@@ -38,6 +38,10 @@ public class UserController {
     public User updateUser(@RequestBody User request,@PathVariable Long id){
        User user =  userRepository.findById(id).orElseThrow();
        user.setUsername(request.getUsername());
+       user.setFullname(request.getFullname());
+       user.setEmail(request.getEmail());
+       user.setPhone(request.getPhone());
+       user.setAddress(request.getAddress());
        return userRepository.save(user);
     }
 }
